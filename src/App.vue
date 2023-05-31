@@ -73,6 +73,7 @@ export default {
         this.showFoodInfo = false;
       } catch (error) {
         console.error('파일을 처리하는 도중 오류가 발생했습니다:', error);
+        alert('Please upload a valid JSON file.');
       }
     },
     handleYes() {

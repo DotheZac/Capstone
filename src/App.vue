@@ -3,7 +3,7 @@
     <h1>Food List</h1>
     <div v-if="currentFood">
       <p>{{ currentFood.foodName }}</p>
-      <ul>
+      <ul v-if="showFoodInfo">
         <li>칼로리: {{ currentFood.foodCalorie }}</li>
         <li>탄수화물: {{ currentFood.foodCarb }}</li>
         <li>단백질: {{ currentFood.foodProtein }}</li>
@@ -25,7 +25,8 @@ export default {
   data() {
     return {
       foodInfos: [],
-      currentFoodIndex: 0
+      currentFoodIndex: 0,
+      showFoodInfo: false
     };
   },
   computed: {
@@ -69,14 +70,16 @@ export default {
 
         this.foodInfos = foodInfos;
         this.currentFoodIndex = 0;
+        this.showFoodInfo = false;
       } catch (error) {
         console.error('파일을 처리하는 도중 오류가 발생했습니다:', error);
       }
     },
     handleYes() {
-      
+      this.showFoodInfo = true;
     },
     handleNo() {
+      this.showFoodInfo = false;
       this.currentFoodIndex++;
     }
   }

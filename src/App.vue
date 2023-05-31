@@ -2,7 +2,14 @@
   <div>
     <h1>Food List</h1>
     <ul>
-      <li v-for="food in foodNames" :key="food">{{ food }}</li>
+      <li v-for="food in foodInfos" :key="food.foodName">{{ food.foodName }}
+        <ul>
+          <li>칼로리: {{ food.foodCalorie }}</li>
+          <li>탄수화물: {{ food.foodCarb }}</li>
+          <li>단백질: {{ food.foodProtein }}</li>
+          <li>지방: {{ food.foodFat }}</li>
+        </ul>
+      </li>
     </ul>
     <input type="file" @change="handleFileSelect" accept=".json">
   </div>
@@ -10,10 +17,10 @@
 
 <script>
 export default {
-  name: 'MyComponent',
+  name: 'JSONParser',
   data() {
     return {
-      foodNames: []
+      foodInfos: []
     };
   },
   methods: {
@@ -32,7 +39,7 @@ export default {
       try {
         const parsedData = JSON.parse(contents);
         const resultLength = parsedData.result.length;
-        const foodNames = [];
+        const foodInfos = [];
 
         for (let i = 0; i < resultLength; i++) {
           let food = parsedData.result[i];
@@ -40,11 +47,18 @@ export default {
           for (let j = 0; j < classInfoLength; j++) {
             let foodInfo = food.class_info[j];
             let foodName = foodInfo.food_name;
-            foodNames.push(foodName);
+            let foodNut = foodInfo.food_nutrients['1회제공량당_영양성분'];
+            let foodCalorie = foodNut['열량(kcal)'];
+            let foodCarb = foodNut['탄수화물']['총량(g)']
+            let foodProtein = foodNut['단백질(g)']
+            let foodFat = foodNut['지방']['총량(g)']
+
+            foodInfos.push({ foodName, foodCalorie,foodCarb, foodProtein, foodFat });
+            
           }
         }
 
-        this.foodNames = foodNames;
+        this.foodInfos = foodInfos;
       } catch (error) {
         console.error('파일을 처리하는 도중 오류가 발생했습니다:', error);
       }
